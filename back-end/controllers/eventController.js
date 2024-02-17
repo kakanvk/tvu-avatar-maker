@@ -14,6 +14,21 @@ exports.getAllEvents = async (req, res) => {
   }
 };
 
+// Controller để lấy tất cả các sự kiện công khai
+exports.getPublicEvents = async (req, res) => {
+  try {
+    const publicEvents = await Event.findAll({
+      where: {
+        public: 'public'
+      }
+    });
+    res.json(publicEvents);
+  } catch (error) {
+    console.error('Error fetching public events:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Controller để lấy thông tin của sự kiện theo ID
 exports.getEventById = async (req, res) => {
   try {
@@ -57,7 +72,7 @@ exports.createEvent = async (req, res) => {
 exports.updateEventById = async (req, res) => {
   try {
     const eventId = req.params.id;
-    const { name, description, auth, slug, frameURL } = req.body;
+    const { name, description, auth, slug, frameURL, public, downloaded, viewed } = req.body;
     const event = await Event.findByPk(eventId);
 
     // Kiểm tra sự kiện có tồn tại không
@@ -66,11 +81,14 @@ exports.updateEventById = async (req, res) => {
     }
 
     // Cập nhật thông tin của sự kiện
-    if(name) event.name = name;
-    if(description) event.description = description;
-    if(auth) event.auth = auth;
-    if(slug) event.slug = slug;
-    if(frameURL) event.frameURL = frameURL;
+    if (name) event.name = name;
+    if (description) event.description = description;
+    if (auth) event.auth = auth;
+    if (slug) event.slug = slug;
+    if (frameURL) event.frameURL = frameURL;
+    if (public) event.public = public;
+    if (downloaded) event.downloaded = downloaded;
+    if (viewed) event.viewed = viewed;
 
     await event.save();
 

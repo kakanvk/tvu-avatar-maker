@@ -45,6 +45,21 @@ const Event = sequelize.define('Event', {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: defaultEndDate
+    },
+    public: {
+        type: DataTypes.ENUM('public', 'private', 'only-me'),
+        allowNull: false,
+        defaultValue: 'private'
+    },
+    downloaded: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    viewed: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     }
 });
 

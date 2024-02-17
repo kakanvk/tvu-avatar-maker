@@ -1,7 +1,6 @@
 // models/User.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const bcrypt = require('bcrypt');
 
 const User = sequelize.define('User', {
     id: {
@@ -23,11 +22,11 @@ const User = sequelize.define('User', {
     },
     avataURL: {
         type: DataTypes.STRING,
-        allowNull: true,
         defaultValue: "https://cdn-icons-png.flaticon.com/512/8792/8792047.png"
     },
     role: {
-        type: DataTypes.ENUM('user', 'admin'),
+        type: DataTypes.ENUM('banned', 'user', 'admin'),
+        allowNull: false,
         defaultValue: 'user'
     }
 });

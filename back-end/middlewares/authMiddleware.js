@@ -58,7 +58,7 @@ exports.checkEventOwnership = async (req, res, next) => {
         }
 
         // Kiểm tra xem người dùng có phải là người tạo sự kiện không
-        if (event.auth !== userId) {
+        if (req.user.role !== 'admin' && event.auth !== userId) {
             return res.status(403).json({ error: 'You are not authorized to perform this action' });
         }
 
@@ -66,6 +66,26 @@ exports.checkEventOwnership = async (req, res, next) => {
         next();
     } catch (error) {
         console.error('Error checking event ownership:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+exports.checkAdmin = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+
+        // Tìm người dùng trong cơ sở dữ liệu
+        const user = await User.findByPk(userId);
+
+        // Kiểm tra xem người dùng có tồn tại và có vai trò là admin không
+        if (!user || user.role !== 'admin') {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        // Nếu người dùng có vai trò là admin, tiếp tục thực hiện các yêu cầu tiếp theo
+        next();
+    } catch (error) {
+        console.error('Error checking admin:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

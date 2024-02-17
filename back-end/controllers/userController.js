@@ -17,7 +17,7 @@ exports.getAllUsers = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({ name, email, password: hashedPassword });
@@ -43,14 +43,18 @@ exports.updateUserById = async (req, res) => {
     }
 
     // Cập nhật thông tin của người dùng
-    if(name) user.name = name;
-    if(email) user.email = email;
+    if (name) user.name = name;
+    if (email) user.email = email;
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       user.password = hashedPassword;
     }
-    if(avataURL) user.avataURL = avataURL;
-    if(role) user.role = role;
+    if (avataURL) user.avataURL = avataURL;
+    if (role && req.user.role === "admin") {
+      user.role = role;
+    } else {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
 
     // Lưu thay đổi vào cơ sở dữ liệu
     await user.save();

@@ -1,0 +1,12 @@
+.Client-navbar{
+    padding: 0 50px;
+}
+
+.Navbar-btn-login{
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+.Client-content{
+    height: 2000px;
+}
