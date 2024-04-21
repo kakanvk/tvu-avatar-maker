@@ -4,7 +4,7 @@ import './layout.css'
 function Admin() {
   return (
     <div className='Admin'>
-        Admin Site
+      Admin Site
     </div>
   )
 }
